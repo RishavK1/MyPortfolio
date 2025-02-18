@@ -1,34 +1,75 @@
-import React, { useState } from 'react';
-import { Send } from 'lucide-react';
+import React, { useState, useRef } from "react";
+import { Send } from "lucide-react";
+import emailjs from "@emailjs/browser";
+import toast, { Toaster } from "react-hot-toast";
+
+// Initialize EmailJS
+emailjs.init({
+  publicKey: "WrfjS34CsLNNMeySG",
+});
 
 const Contact = () => {
+  const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
+    from_name: "",
+    from_email: "",
+    message: "",
+    to_name: "Rishav Kamboj",
+    reply_to: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsSubmitting(false);
-    setSubmitted(true);
-    setFormData({ name: '', email: '', message: '' });
-    
-    // Reset success message after 5 seconds
-    setTimeout(() => setSubmitted(false), 5000);
+
+    try {
+      const templateParams = {
+        from_name: formData.from_name,
+        from_email: formData.from_email,
+        message: formData.message,
+        to_name: formData.to_name,
+        reply_to: formData.from_email,
+        sender_email: formData.from_email, // Add sender's email to show in "from" field
+      };
+
+      const result = await emailjs.send(
+        "service_pzar6tn",
+        "template_bcy0rni",
+        templateParams
+      );
+
+      if (result.text === "OK") {
+        toast.success("Message sent successfully!");
+        setFormData({
+          from_name: "",
+          from_email: "",
+          message: "",
+          to_name: "Rishav Kamboj",
+          reply_to: "",
+        });
+      }
+    } catch (error) {
+      toast.error("Failed to send message. Please try again.");
+      console.error("EmailJS Error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    const fieldMapping: { [key: string]: string } = {
+      name: "from_name",
+      email: "from_email",
+      message: "message",
+    };
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [fieldMapping[name] || name]: value,
     });
   };
 
@@ -36,7 +77,11 @@ const Contact = () => {
     <section id="contact" className="py-20">
       <div className="glass-panel p-12 rounded-2xl">
         <h2 className="text-4xl font-bold text-white mb-8">Get in Touch</h2>
-        <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
+        <form
+          ref={formRef}
+          onSubmit={handleSubmit}
+          className="max-w-2xl mx-auto"
+        >
           <div className="mb-6">
             <label htmlFor="name" className="block text-white mb-2">
               Name
@@ -45,7 +90,7 @@ const Contact = () => {
               type="text"
               id="name"
               name="name"
-              value={formData.name}
+              value={formData.from_name}
               onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:border-pink-200 transition-colors"
               required
@@ -60,7 +105,7 @@ const Contact = () => {
               type="email"
               id="email"
               name="email"
-              value={formData.email}
+              value={formData.from_email}
               onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:border-pink-200 transition-colors"
               required
@@ -102,12 +147,8 @@ const Contact = () => {
               </>
             )}
           </button>
-          {submitted && (
-            <div className="mt-4 text-center text-green-300">
-              Thank you for your message! I'll get back to you soon.
-            </div>
-          )}
         </form>
+        <Toaster position="bottom-right" />
       </div>
     </section>
   );
