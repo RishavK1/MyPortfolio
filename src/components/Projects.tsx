@@ -3,6 +3,7 @@ import { ExternalLinkIcon, GithubIcon } from 'lucide-react';
 import airbnb from "../assests/AB .jpg";
 import jobportal from "../assests/Job.jpg";
 import weather from "../assests/WA.jpg"
+import contentai from "../assests/Content ai.jpg"
 
 const Projects = () => {
   const projects = [
@@ -17,7 +18,7 @@ const Projects = () => {
     {
       title: "Content AI ",
       description: "AI-powered content generation dashboard.",
-      image: weather,
+      image: contentai,
       technologies: ["Typescript", "Tailwind CSS", "Supabase", "Generative AI"],
       demoUrl: "https://content-ai-neon.vercel.app/",
       githubUrl: "https://github.com/RishavK1/Content-AI",
