@@ -1,12 +1,27 @@
 import React from 'react';
 import { ExternalLinkIcon, GithubIcon } from 'lucide-react';
 import airbnb from "../assests/AB .jpg";
-import jobportal from "../assests/Job.jpg";
+import jobportal from "../assests/job portal.jpg";
 import weather from "../assests/WA.jpg"
 import contentai from "../assests/Content ai.jpg"
 
 const Projects = () => {
   const projects = [
+    {
+      title: "Insider job - Job Portal",
+      description: "A modern web application built with React and Node.js",
+      image: jobportal,
+      technologies: [
+        "React.js",
+        "Tailwind CSS",
+        "Node.js",
+        "Clerk",
+        "MongoDB",
+        "Cloudinary",
+      ],
+      demoUrl: "https://job-portal-beige-seven.vercel.app/",
+      githubUrl: "https://github.com/RishavK1/Job-Portal",
+    },
     {
       title: "AirBnb",
       description: "A modern web application built with EJS and Node.js",
@@ -23,21 +38,7 @@ const Projects = () => {
       demoUrl: "https://content-ai-neon.vercel.app/",
       githubUrl: "https://github.com/RishavK1/Content-AI",
     },
-    {
-      title: "ApniJob - Job Portal",
-      description: "A modern web application built with React and Node.js",
-      image: jobportal,
-      technologies: [
-        "React.js",
-        "Tailwind CSS",
-        "Node.js",
-        "Redux",
-        "MongoDB",
-        "ShadCN UI",
-      ],
-      demoUrl: "#",
-      githubUrl: "https://github.com/RishavK1/ApniJob",
-    },
+
     {
       title: "Weather App",
       description: "A real time weather forcasting web-app",
